@@ -1,0 +1,11 @@
+========== INTERPARTICLE DISTANCES ==========
+Number of connections below the maximum neighbor distance: 1017
+
+Total interparticle distance: 1192.7155
+
+Minimum interparticle distance: 0.05442
+Maximum interparticle distance: 0.9991
+Average interparticle distance: 0.5864
+
+Variance of interparticle distance: 0.06489
+SD of interparticle distance: 0.2547

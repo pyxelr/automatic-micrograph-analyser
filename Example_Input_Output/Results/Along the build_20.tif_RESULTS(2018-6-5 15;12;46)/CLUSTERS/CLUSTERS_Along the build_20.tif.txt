@@ -1,0 +1,16 @@
+_____________________________________________
+ROI diameter: 50.0 pixel
+min. individual cluster density: 2.0
+max. iterations: 25.0
+initiated ROIs in total: 1218
+--------------------------------------------------
+187 clusters accepted (~15.35 %)
+49 individual clusters remaining after fusion
+138 ROIs fused due to overlap
+average fused cluster area: 3931.7755102040815 pixel
+--------------------------------------------------
+762 clusters excluded due to low density (~62.56 %)
+269 duplicate clusters (~22.09 %)
+max. iteration number reached: 17
+0 terminated iterations (~0.00 %) (blue ROIs)
+_____________________________________________

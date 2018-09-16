@@ -1,0 +1,22 @@
+========== ANALYSIS SPECIFICATIONS ==========
+
+=== DAY AND TIME OF ANALYSIS ===
+Date: Thu 05-Jul-2018
+Time: 15:12:46
+
+=== INPUT/OUTPUT FILES ===
+Output folder: C:\Users\Pawel\Downloads\+Individual_Project\ImageJ\Results\Along the build_20.tif_RESULTS(2018-6-5 15;12;46)\
+Directory of input file: C:\Users\Pawel\Downloads\+Individual_Project\ImageJ\Test\Along the build_20.tif
+Image title: Along the build_20.tif
+Number of images: 1
+
+=== PREFERENCES OF ANALYSIS ===
+Scale used: 36.75 pixels = 2 um
+Minimum size of particles: 0.1 (um^2)
+Maximum size of particles: Infinity (um^2)
+Particles on the edges: exluded
+Holes of the particles: included
+
+=== RUNNING TIME ===
+Overall time taken for analysis: 61.048 seconds
+Time taken for automatic processes: 42.992 seconds
