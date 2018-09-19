@@ -1,8 +1,8 @@
 /* 
  *  Micrograph_Analysis.ijm
  *  Author: Pawel Cislo <pawel.cisloo@gmail.com> <pawelcislo.com>
- *  Version: 1.0
- *  Start of Development: 01/06/2018
+ *  Version: 1.1
+ *  Start of Development: 19/09/2018
  *  License: https://creativecommons.org/licenses/by-sa/4.0/
  *  
  *	REQUIREMENTS:
@@ -66,14 +66,15 @@
  *			b) provide an option to crop the image manually
  *			c) leave the image without cropping
  *      9) perform segmentation
- *			a) transform input into 8-bit image
- *			b) apply automatic threshold
- *      	c) convert input into binary values
- *      	d) remove small particles from the image (outliers) (oprionally)
- *			e) fill holes in particles on the image (optionally)
- *			f) apply watershed algorithm on the image (optionally)
- *      	g) exclude particles on edges during the analysis (optionally)
- *      	h) include holes of particles in analysis (optionally)
+ *			a) run machine learning segmentation instead of automatic thresholding (optionally)
+ *			b) transform input into 8-bit image
+ *			c) apply automatic threshold
+ *      	d) convert input into binary values (optionally)
+ *      	e) remove small particles from the image (outliers) (oprionally)
+ *			f) fill holes in particles on the image (optionally)
+ *			g) apply watershed algorithm on the image (optionally)
+ *      	h) exclude particles on edges during the analysis (optionally)
+ *      	i) include holes of particles in analysis (optionally
  *		10) ask the user if he is satisfied with the particles taken into analysis (optionally)
  *			a) if not, specify particle size and circularity again, till the user is satisfied
  *			b) if yes, continue to run the script

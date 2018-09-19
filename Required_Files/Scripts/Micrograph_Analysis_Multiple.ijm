@@ -1,8 +1,8 @@
 /* 		
  *  Micrograph_Analysis_Multiple.ijm		
  *  Author: Pawel Cislo <pawel.cisloo@gmail.com> <pawelcislo.com>
- *  Version: 1.0
- *  Start of Development: 01/06/2018
+ *  Version: 1.1
+ *  Start of Development: 19/09/2018
  *  License: https://creativecommons.org/licenses/by-sa/4.0/
  *  
  *	REQUIREMENTS:
@@ -66,14 +66,15 @@
  *			b) provide an option to crop the image manually
  *			c) leave the image without cropping
  *      9) perform segmentation
- *			a) transform input into 8-bit image
- *			b) apply automatic threshold
- *      	c) convert input into binary values
- *      	d) remove small particles from the image (outliers) (oprionally)
- *			e) fill holes in particles on the image (optionally)
- *			f) apply watershed algorithm on the image (optionally)
- *      	g) exclude particles on edges during the analysis (optionally)
- *      	h) include holes of particles in analysis (optionally
+ *			a) run machine learning segmentation instead of automatic thresholding (optionally)
+ *			b) transform input into 8-bit image
+ *			c) apply automatic threshold
+ *      	d) convert input into binary values (optionally)
+ *      	e) remove small particles from the image (outliers) (oprionally)
+ *			f) fill holes in particles on the image (optionally)
+ *			g) apply watershed algorithm on the image (optionally)
+ *      	h) exclude particles on edges during the analysis (optionally)
+ *      	i) include holes of particles in analysis (optionally
  *		10) ask the user if he is satisfied with the particles taken into analysis (optionally)
  *			a) if not, specify particle size and circularity again, till the user is satisfied
  *			b) if yes, continue to run the script
@@ -226,15 +227,16 @@ Dialog.addCheckbox("Preview selected particles before the analysis", false);
 Dialog.setInsets(10,10,0);
 Dialog.addMessage("What are your analysis preferences?");
 
-labels2 = newArray("Remove small particles (outliers) from the image", "Fill holes of the particles on the image", "Apply Watershed Algorithm on the image", "Exclude edges in analysis", "Include holes in analysis");
+labels2 = newArray("Run machine learning segmentation instead of automatic thresholding", "Make binary image", "Remove small particles (outliers) from the image", "Fill holes of the particles on the image", "Apply Watershed Algorithm on the image", "Exclude edges in analysis", "Include holes in analysis");
 
 defaults2 = newArray(labels2.length);
-defaults2[0] = true;
 defaults2[1] = true;
+defaults2[2] = true;
 defaults2[3] = true;
-defaults2[4] = true;
+defaults2[5] = true;
+defaults2[6] = true;
 
-rows = 5;
+rows = 7;
 columns = 1;
 
 Dialog.setInsets(0,24,0);
@@ -246,7 +248,7 @@ Dialog.addRadioButtonGroup("How would you like to set the scale?", items, 4, 1, 
 
 // ASK FOR TYPE OF LABEL REMOVAL
 items = newArray("Draw rectangle over the area to be measured", "Use predefined method for CU micrographs", "There is no label to remove");
-Dialog.addRadioButtonGroup("How would you like to remove the label?", items, 3, 1, "Use predefined method for CU micrographs");
+Dialog.addRadioButtonGroup("How would you like to remove the label?", items, 3, 1, "Draw rectangle over the area to be measured");
 
 // DISPLAY MENU
 Dialog.show()
@@ -273,7 +275,7 @@ input_scale = Dialog.getRadioButton();
 input_label = Dialog.getRadioButton();
 
 // IF CHOSEN OPTION IS TRUE
-if(chosenOption2[3]==1) {
+if(chosenOption2[5]==1) {
 	analysis_options += " exclude";
 	edges = "excluded";
 }
@@ -281,7 +283,7 @@ else {
 	edges = "included";
 }
 
-if(chosenOption2[4]==1) {
+if(chosenOption2[6]==1) {
 	analysis_options += " include";
 	holes = "included";
 }
@@ -461,29 +463,59 @@ for (i=0; i<list.length; i++) {
 
 // ==========BEGIN SEGMENTATION==========
 
-	    // TRANSFORM IMAGE INTO 8-BIT TYPE
-	    run("8-bit");
+	// RUN TRAINABLE MACHINE LEARNING WEKA SEGMENTATION INSTEAD OF AUTOMATIC THRESHOLDING (OPTIONALLY)
+		if (chosenOption2[0]==1) {
+			setBatchMode(false);
+			run("Trainable Weka Segmentation");
+			weka_window = getTitle();
+			title_for_weka_segmentation = "Follow the steps";
+		  	msg_for_weka_segmentation = "1. Mark classes using your mouse and add them to classes 1 (particles) and 2 (background).\n\n2. Click 'Train classifier'.\n\n3. Wait for the fully green and red image (be patient).\n\n4. Click 'Create result'.\n\n5. Close main Weka Segmentation and input image window (you should be left with 'Log' and 'Classified image' windows).\n\n6. Click 'OK' button in the window of this message.";  	waitForUser(title_for_weka_segmentation, msg_for_weka_segmentation);
+		  	call("trainableSegmentation.Weka_Segmentation.getResult");
+		  	selectWindow("Classified image");
+		  	rename(list[i]);
+		  	if (isOpen("Log")) {
+		    	selectWindow("Log");
+		    	saveAs("Text", dir3+"MACHINE_LEARNING_RESULTS_"+list[i]+".txt");
+		    	print("\\Clear");
+		    	run("Close");
+		    }	    
+		    // TRANSFORM IMAGE INTO 8-BIT TYPE (it is a must for analysing particles)
+			run("8-bit");
+			// APPLY THRESHOLD (it is a must for analysing particles. No worries, it does not change the weka segmentation results)
+			setAutoThreshold("Default dark");
+			setOption("BlackBackground", true);
+			run("Convert to Mask");
+			run("Invert");
+		}
+		else {
+			// TRANSFORM IMAGE INTO 8-BIT TYPE
+			run("8-bit");
+
+			// APPLY THRESHOLD
+			setAutoThreshold("Default dark");
+			setOption("BlackBackground", true);
+			run("Convert to Mask");
+		}
+
+		setBatchMode(true);
 	    
-	    // APPLY THRESHOLD
-	    setAutoThreshold("Default dark");
-	    setOption("BlackBackground", true);
-	    run("Convert to Mask");
-	    
-	    // TRANSFORM IMAGE INTO BINARY VALUES, REMOVE OUTLIERS AND FILL HOLES IN PARTICLES
-	    run("Make Binary", "thresholded remaining white");
+	    // TRANSFORM IMAGE INTO BINARY VALUES (OPTIONALLY)
+	   	if(chosenOption2[1]==1) {
+	   	run("Make Binary", "thresholded remaining white");
+	   	}
 
 	    // REMOVE OUTLIERS (OPTIONALLY)
-	    if(chosenOption2[0]==1) {
+	    if(chosenOption2[2]==1) {
 			run("Remove Outliers...", "radius=1 threshold=50 which=Bright");
 		}
 	    
 	    // FILL HOLES (OPTIONALLY)
-	    if(chosenOption2[1]==1) {
+	    if(chosenOption2[3]==1) {
 			run("Fill Holes");
 		}
 
 		// RUN WATERSHED ALGORITHM (OPTIONALLY)
-		if(chosenOption2[2]==1) {
+		if(chosenOption2[4]==1) {
 			run("Watershed");
 		}    
 
