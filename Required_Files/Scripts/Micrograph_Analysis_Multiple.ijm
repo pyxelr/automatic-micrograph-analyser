@@ -87,7 +87,8 @@
  *			e)	cluster indication (saved in the “CLUSTERS” folder)
  *			f)	images 
  *			g)	specifications used in analysis (saved in “ANALYSIS_INFO(…)” file)
- *			h)	time of running manual and automatic operations of the script (saved in “ANALYSIS_INFO…” file)	
+ *			h)	time of running manual and automatic operations of the script (saved in “ANALYSIS_INFO…” file)
+ *			i)  machine learning results (saved in the main folder)	
  *
  *
  *	HELP:
