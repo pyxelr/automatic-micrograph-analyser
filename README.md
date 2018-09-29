@@ -12,7 +12,7 @@ You can find example input and output data in the [Example_Input_Output](Example
 
 ## Required Files
 
-Please find the scripts in the [Scripts](Required_Files\Scripts) folder. If you cannot download the external plugins from their official websites, you can find them in [Plugins](RRequired_Files\Plugins) folder.
+Please find the scripts in the [Scripts](Required_Files/Scripts) folder. If you cannot download the external plugins from their official websites, you can find them in [Plugins](Required_Files/Plugins) folder.
 
 ### Usage Tutorial
 
