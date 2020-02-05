@@ -6,6 +6,12 @@ You can read the following [post on my blog](https://pawelcislo.com/2018/09/16/h
 
 ![](./repo_image.png)
 
+## Main Window (settings)
+
+Opening the script results in the following window, where the user can specify his desired analysis settings:
+
+![](./main_window.png)
+
 ## Example Input/Output
 
 You can find example input and output data in the [Example_Input_Output](Example_Input_Output) folder of this repository.
